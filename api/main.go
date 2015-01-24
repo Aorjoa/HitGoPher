@@ -7,6 +7,9 @@ import (
     "fmt"
 )
 
+// Declare global variable
+var MapPlayer map[string] int = map[string] int {}
+
 type T struct {
     Action string
     Position string
@@ -25,10 +28,13 @@ func prepairData(position string, point int) (string) {
     return position + "|" + strconv.Itoa(point)
 }
 
-// func newPlayer(name string) (Player){
-//     PlayerSlice = append(PlayerSlice,)
-// }
+func newPlayer(name string) (){
+    MapPlayer[name] = 0
+}
 
+func winnerAddPoint(name string, point int) {
+    MapPlayer[name] += point
+}
 func sentToClient(ws *websocket.Conn) {
     //var position = randomGopher()
     //var point = getCurrentPoint()
@@ -36,23 +42,18 @@ func sentToClient(ws *websocket.Conn) {
     var receiveData T
     for {
         websocket.JSON.Receive(ws,&receiveData)
-            if receiveData.Action == "newPlayer" {
-                map[string]interface{}{
-                    "playerName" : receiveData.Player,
-                    "score" : 0
-            }
+        if receiveData.Action == "newPlayer" {
+            newPlayer(receiveData.Player)
+        }else{
+            winnerAddPoint(receiveData.Player,1)
         }
-        fmt.Println(receiveData.Action)
-        fmt.Println(receiveData.Position)
-        fmt.Println(receiveData.Player)
+        fmt.Println(MapPlayer)
         websocket.Message.Send(ws,receiveData.Action)
     }
 }
 
 func main() {
-    var SlicePlayer [] map[string]interface{} = make([] map[string]interface{},0)
-    fmt.Println(MapPlayer)
-    http.Handle("/action", websocket.Handler(sentToClient))
+    http.Handle("/start", websocket.Handler(sentToClient))
     err := http.ListenAndServe(":12345", nil)
     if err != nil {
         panic("ListenAndServe: "+ err.Error())
