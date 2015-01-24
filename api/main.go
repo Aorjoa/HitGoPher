@@ -37,6 +37,7 @@ func newPlayer(name string) (){
 
 func winnerAddPoint(name string, point int) {
     MapPlayer[name] += point
+
 }
 func sentToClient(ws *websocket.Conn) {
     //var position = randomGopher()
@@ -53,19 +54,25 @@ func sentToClient(ws *websocket.Conn) {
         fmt.Println("Received")
         if receiveData.Action == "newPlayer" {
             newPlayer(receiveData.Player)
-        }else{
+            websocket.JSON.Send(ws, map[string] interface{} {
+                        "position" : golbalNumber,
+                        "pointInfo" : MapPlayer,
+                    });
+                }
 
             if golbalNumber == receiveData.Position {
                 winnerAddPoint(receiveData.Player,1)
                 golbalNumber = randomGopher()
                 for _, value := range channel {
-                    websocket.JSON.Send(value, MapPlayer)
-                    websocket.JSON.Send(value, golbalNumber)
+                    websocket.JSON.Send(value, map[string] interface{} {
+                        "position" : golbalNumber,
+                        "pointInfo" : MapPlayer,
+                    });
                 }
                 fmt.Println("Position : " + golbalNumber)
                 fmt.Println(channel)
             }
-        }
+        
     }
 }
 
