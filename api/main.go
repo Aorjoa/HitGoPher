@@ -5,10 +5,12 @@ import (
     "golang.org/x/net/websocket"
     "strconv"
     "fmt"
+    "math/rand"
 )
 
 // Declare global variable
 var MapPlayer map[string] int = map[string] int {}
+var channel []*websocket.Conn = make([]*websocket.Conn, 0)
 
 type T struct {
     Action string
@@ -17,8 +19,13 @@ type T struct {
 }
 
 func randomGopher() (string) {
-    return "A1"
+    var position = []string{"A1","A2","A3",
+                            "B1","B2","B3",
+                            "C1","C2","C3",}
+    randNumber := rand.Intn(8)
+    return position[randNumber]
 }
+
 
 func getCurrentPoint() (int) {
     return 200
@@ -39,6 +46,8 @@ func sentToClient(ws *websocket.Conn) {
     //var position = randomGopher()
     //var point = getCurrentPoint()
     //var data = prepairData(position, point)
+
+    channel = append(channel, ws)
     var receiveData T
     for {
         err := websocket.JSON.Receive(ws,&receiveData)
@@ -51,7 +60,12 @@ func sentToClient(ws *websocket.Conn) {
         }else{
             winnerAddPoint(receiveData.Player,1)
         }
-        websocket.JSON.Send(ws, MapPlayer)
+        fmt.Println("Position : "+randomGopher())
+        fmt.Println(channel)
+
+        for _, value := range channel {
+            websocket.JSON.Send(value, MapPlayer)
+        }
     }
 }
 
