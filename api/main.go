@@ -3,7 +3,7 @@ package main
 import (
     "net/http"
     "golang.org/x/net/websocket"
-    "strconv"
+    "time"
     "fmt"
     "math/rand"
 )
@@ -18,21 +18,16 @@ type T struct {
     Player string
 }
 
+
+
 func randomGopher() (string) {
     var position = []string{"A1","A2","A3",
                             "B1","B2","B3",
                             "C1","C2","C3",}
+
+    rand.Seed(time.Now().UnixNano())
     randNumber := rand.Intn(8)
     return position[randNumber]
-}
-
-
-func getCurrentPoint() (int) {
-    return 200
-}
-
-func prepairData(position string, point int) (string) {
-    return position + "|" + strconv.Itoa(point)
 }
 
 func newPlayer(name string) (){
@@ -59,12 +54,12 @@ func sentToClient(ws *websocket.Conn) {
             newPlayer(receiveData.Player)
         }else{
             winnerAddPoint(receiveData.Player,1)
-        }
-        fmt.Println("Position : "+randomGopher())
-        fmt.Println(channel)
+            fmt.Println("Position : "+randomGopher())
+            fmt.Println(channel)
 
-        for _, value := range channel {
-            websocket.JSON.Send(value, MapPlayer)
+            for _, value := range channel {
+                websocket.JSON.Send(value, MapPlayer)
+            }
         }
     }
 }
