@@ -41,14 +41,17 @@ func sentToClient(ws *websocket.Conn) {
     //var data = prepairData(position, point)
     var receiveData T
     for {
-        websocket.JSON.Receive(ws,&receiveData)
+        err := websocket.JSON.Receive(ws,&receiveData)
+        if err != nil {
+            return
+        }
+        fmt.Println("Received")
         if receiveData.Action == "newPlayer" {
             newPlayer(receiveData.Player)
         }else{
             winnerAddPoint(receiveData.Player,1)
         }
-        fmt.Println(MapPlayer)
-        websocket.Message.Send(ws,receiveData.Action)
+        websocket.JSON.Send(ws, MapPlayer)
     }
 }
 
