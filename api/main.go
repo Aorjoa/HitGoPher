@@ -51,7 +51,8 @@ func sentToClient(ws *websocket.Conn) {
         if err != nil {
             return
         }
-        fmt.Println("Received")
+        fmt.Println("======Received======")
+        fmt.Println(receiveData)
         if receiveData.Action == "newPlayer" {
             newPlayer(receiveData.Player)
             websocket.JSON.Send(ws, map[string] interface{} {

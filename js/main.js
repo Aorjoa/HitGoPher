@@ -15,8 +15,12 @@
 
     $(document).ready(function(){
         $('img').on("click",function(){
-            if(this.id == dataReceive.position){
-                ws.send(JSON.stringify({"Action":"hit", "Position":this.id, "Player": playerName}));
+            var clickedId = this.id;
+            if(clickedId == dataReceive.position){
+                $('#'+this.id).attr("src","images/gopher_break.png"); 
+                    setTimeout(function() {
+                        ws.send(JSON.stringify({"Action":"hit", "Position":clickedId, "Player": playerName}));
+                    },300);
             }
         });
     });
