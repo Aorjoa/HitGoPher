@@ -6,5 +6,6 @@
 			ws.send(JSON.stringify({"Action":"hit", "Position":"A1", "Player":"aorjoa"}));
 	}
 	ws.onmessage = function(msg) {
-		console.log(msg.data);
+		var dataFirstLv = JSON.parse(msg.data);
+        $("#"+dataFirstLv.position).attr("src","images/gopher_in_cake.png");
 	}
