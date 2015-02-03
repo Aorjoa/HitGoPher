@@ -20,7 +20,7 @@
                 $('#'+this.id).attr("src","images/gopher_break.png"); 
                     setTimeout(function() {
                         ws.send(JSON.stringify({"Action":"hit", "Position":clickedId, "Player": playerName}));
-                    },300);
+                    },200);
             }
         });
     });

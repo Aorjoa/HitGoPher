@@ -49,6 +49,7 @@ func sentToClient(ws *websocket.Conn) {
     for {
         err := websocket.JSON.Receive(ws,&receiveData)
         if err != nil {
+            delete(channel, ws)
             return
         }
         fmt.Println("======Received======")
