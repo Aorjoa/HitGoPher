@@ -49,7 +49,7 @@ func sentToClient(ws *websocket.Conn) {
     for {
         err := websocket.JSON.Receive(ws,&receiveData)
         if err != nil {
-            delete(channel, ws)
+            channel = deleteWebSocketInSlice(ws,channel)
             return
         }
         fmt.Println("======Received======")
@@ -77,7 +77,16 @@ func sentToClient(ws *websocket.Conn) {
         
     }
 }
-
+func deleteWebSocketInSlice(ws *websocket.Conn, list []*websocket.Conn) []*websocket.Conn {
+    var count = len(list)
+    for i := 0; i < count; i++ {
+        if(list[i]==ws){
+            fmt.Println(">_<\"")
+            return append(list[0:i],list[i+1:]...)
+        }
+    }
+    return list
+}
 func main() {
     golbalNumber = randomGopher()
     fmt.Println(golbalNumber)
