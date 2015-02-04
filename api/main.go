@@ -39,17 +39,14 @@ func winnerAddPoint(name string, point int) {
     MapPlayer[name] += point
 
 }
-func sentToClient(ws *websocket.Conn) {
-    //var position = randomGopher()
-    //var point = getCurrentPoint()
-    //var data = prepairData(position, point)
 
+func sentToClient(ws *websocket.Conn) {
     channel = append(channel, ws)
     var receiveData T
     for {
         err := websocket.JSON.Receive(ws,&receiveData)
         if err != nil {
-            channel = deleteWebSocketInSlice(ws,channel)
+            channel = deleteWebSocketInSlice(channel,ws)
             return
         }
         fmt.Println("======Received======")
@@ -77,7 +74,8 @@ func sentToClient(ws *websocket.Conn) {
         
     }
 }
-func deleteWebSocketInSlice(ws *websocket.Conn, list []*websocket.Conn) []*websocket.Conn {
+
+func deleteWebSocketInSlice(list []*websocket.Conn,ws *websocket.Conn) []*websocket.Conn {
     var count = len(list)
     for i := 0; i < count; i++ {
         if(list[i]==ws){
@@ -87,6 +85,7 @@ func deleteWebSocketInSlice(ws *websocket.Conn, list []*websocket.Conn) []*webso
     }
     return list
 }
+
 func main() {
     golbalNumber = randomGopher()
     fmt.Println(golbalNumber)

@@ -4,8 +4,37 @@
 	<title>
 		Hit-GoPher
 	</title>
+
+	<link href="css/flat-ui.css" rel="stylesheet">
+	<link href="css/vendor/bootstrap.min.css" rel="stylesheet">
+	<style type="text/css">
+		div#ask-name{
+    		position:absolute;
+			top:50%;
+			left:50%;
+			width:400px;
+			height:250px;
+			margin-left:-200px;
+			margin-top:-125px;
+			z-index: 2;
+		}
+		a#statusTxt{
+			text-decoration: none;
+		}
+	</style>
 </head>
 <body>
+<div id="ask-name">
+<div class="login-form">
+            <div class="form-group">
+              <input type="text" class="form-control login-field" value="" placeholder="Enter your name" id="login-name">
+              <label class="login-field-icon fui-user" for="login-name"></label>
+            </div>
+
+            <a class="btn btn-primary btn-lg btn-block" id="startBtn">Start!</a>
+            <a class="login-link" id="statusTxt">Status : [NaN]</a>
+	</div>
+</div>
 <div align="center">
 	<table>
 		<tr>
@@ -25,7 +54,8 @@
 		</tr>
 	</table> 
 </div>
-	<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/flat-ui.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>

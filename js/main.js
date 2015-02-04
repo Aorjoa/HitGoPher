@@ -1,12 +1,18 @@
 	// Declare global variable
-    var playerName = "aorjoa";
+    var playerName;
     var dataReceive;
     // Connect WebSocket
 	var ws = new WebSocket("ws://localhost:12345/start");
 
 	ws.onopen = function (){
-            ws.send(JSON.stringify({"Action":"newPlayer", "Player": playerName}));
+        $("#statusTxt").text("Status : Connected");
 	};
+    ws.onclose = function (){
+        $("#statusTxt").text("Status : Closed");
+    };
+    ws.onerror = function (){
+        $("#statusTxt").text("Status : Connection error!");
+    };
 	ws.onmessage = function(msg) {
 		dataReceive = JSON.parse(msg.data);
         $("img").attr("src","images/cupcake.png"); 
@@ -24,3 +30,13 @@
             }
         });
     });
+    window.ondragstart = function() { return false; };
+        $("#startBtn").on('click',function(){
+            playerName = $("#login-name").val();
+             if(playerName != "" && ws.readyState === 1){
+                $("#ask-name").remove();
+                ws.send(JSON.stringify({"Action":"newPlayer", "Player": playerName}));
+             }else{
+                $("#login-name").focus();
+             }
+        });
