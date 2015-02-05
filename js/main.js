@@ -17,6 +17,7 @@
 		dataReceive = JSON.parse(msg.data);
         console.log(dataReceive);
          if(dataReceive.username_already === undefined){
+            $("#ask-name").remove();
             $("img").attr("src","images/cupcake.png"); 
             $("#"+dataReceive.position).attr("src","images/gopher_in_cake.png"); 
         } else{
@@ -40,7 +41,6 @@
         $("#startBtn").on('click',function(){
             playerName = $("#login-name").val();
              if(playerName != "" && ws.readyState === 1){
-                $("#ask-name").remove();
                 ws.send(JSON.stringify({"Action":"newPlayer", "PlayerName": playerName}));
              }else{
                 $("#login-name").focus();

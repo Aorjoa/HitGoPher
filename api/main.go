@@ -81,10 +81,15 @@ func checkUserNameNotUsed(checkName string) bool {
 }
 
 func sendDataLoop() {
-    for key,value := range WebSocketMaps {
+    var allPlayerScore map[string]int = make(map[string] int)
+    for _,value := range WebSocketMaps {
+        allPlayerScore[value.PlayerName] = value.PlayerPoint
+    }
+
+    for key,_ := range WebSocketMaps {
         websocket.JSON.Send(key, map[string] interface{} {
             "position" : golbalNumber,
-            "pointInfo" : value,
+            "pointInfo" : allPlayerScore,
         });
     }
 }
