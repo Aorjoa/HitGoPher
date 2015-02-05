@@ -8,6 +8,13 @@
 	<link href="css/flat-ui.css" rel="stylesheet">
 	<link href="css/vendor/bootstrap.min.css" rel="stylesheet">
 	<style type="text/css">
+		div#showPoint{
+    		position:absolute;
+			top:20px;
+			right:20px;
+			width: 200px;
+			height: 80%;
+		}
 		div#ask-name{
     		position:absolute;
 			top:50%;
@@ -16,14 +23,19 @@
 			height:250px;
 			margin-left:-200px;
 			margin-top:-125px;
-			z-index: 2;
+			z-index: 1;
 		}
 		a#statusTxt{
 			text-decoration: none;
 		}
+		.green-color-bg{
+			background-color:#97DB0D;
+		}
 	</style>
 </head>
 <body>
+<div id="showPoint">
+</div>
 <div id="ask-name">
 <div class="login-form">
             <div class="form-group">

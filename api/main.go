@@ -31,8 +31,9 @@ func randomGopher() (string) {
     return position[randNumber]
 }
 
-func winnerAddPoint(player PlayerInfo,point int) {
+func winnerAddPoint(player PlayerInfo,point int) PlayerInfo {
     player.PlayerPoint += point
+    return player
 }
 
 func processReceive(ws *websocket.Conn) {
@@ -62,7 +63,7 @@ func processReceive(ws *websocket.Conn) {
             }
 
             if golbalNumber == receiveData.Position {
-                winnerAddPoint(WebSocketMaps[ws],1)
+                WebSocketMaps[ws] = winnerAddPoint(WebSocketMaps[ws],1)
                 golbalNumber = randomGopher()
                 sendDataLoop()
                 fmt.Println("Position : " + golbalNumber)
