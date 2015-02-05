@@ -15,8 +15,14 @@
     };
 	ws.onmessage = function(msg) {
 		dataReceive = JSON.parse(msg.data);
-        $("img").attr("src","images/cupcake.png"); 
-        $("#"+dataReceive.position).attr("src","images/gopher_in_cake.png"); 
+        console.log(dataReceive);
+         if(dataReceive.username_already === undefined){
+            $("img").attr("src","images/cupcake.png"); 
+            $("#"+dataReceive.position).attr("src","images/gopher_in_cake.png"); 
+        } else{
+            $("#statusTxt").text("Status : User name already!");
+            $("#login-name").focus();
+        }
 	};
 
     $(document).ready(function(){
@@ -25,7 +31,7 @@
             if(clickedId == dataReceive.position){
                 $('#'+this.id).attr("src","images/gopher_break.png"); 
                     setTimeout(function() {
-                        ws.send(JSON.stringify({"Action":"hit", "Position":clickedId, "Player": playerName}));
+                        ws.send(JSON.stringify({"Action":"hit", "Position":clickedId, "PlayerName": playerName}));
                     },200);
             }
         });
@@ -35,7 +41,7 @@
             playerName = $("#login-name").val();
              if(playerName != "" && ws.readyState === 1){
                 $("#ask-name").remove();
-                ws.send(JSON.stringify({"Action":"newPlayer", "Player": playerName}));
+                ws.send(JSON.stringify({"Action":"newPlayer", "PlayerName": playerName}));
              }else{
                 $("#login-name").focus();
              }

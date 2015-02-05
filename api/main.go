@@ -9,17 +9,17 @@ import (
 )
 
 // Declare global variable
-var MapPlayer map[string] int = map[string] int {}
-var channel []*websocket.Conn = make([]*websocket.Conn, 0)
-var golbalNumber string = ""
-
-type T struct {
+type PlayerInfo struct{
+    PlayerName string
+    PlayerPoint int
+}
+type SendBackData struct {
     Action string
     Position string
-    Player string
+    PlayerName string
 }
-
-
+var golbalNumber string
+var WebSocketMaps map[*websocket.Conn] PlayerInfo = make(map[*websocket.Conn] PlayerInfo)
 
 func randomGopher() (string) {
     var position = []string{"A1","A2","A3",
@@ -31,65 +31,67 @@ func randomGopher() (string) {
     return position[randNumber]
 }
 
-func newPlayer(name string) (){
-    MapPlayer[name] = 0
+func winnerAddPoint(player PlayerInfo,point int) {
+    player.PlayerPoint += point
 }
 
-func winnerAddPoint(name string, point int) {
-    MapPlayer[name] += point
-
-}
-
-func sentToClient(ws *websocket.Conn) {
-    channel = append(channel, ws)
-    var receiveData T
+func processReceive(ws *websocket.Conn) {
+    var receiveData SendBackData
     for {
         err := websocket.JSON.Receive(ws,&receiveData)
         if err != nil {
-            channel = deleteWebSocketInSlice(channel,ws)
+            fmt.Print("Destroy player : ")
+            fmt.Println(WebSocketMaps[ws].PlayerName)
+            delete(WebSocketMaps,ws)
             return
-        }
+        } 
         fmt.Println("======Received======")
         fmt.Println(receiveData)
-        if receiveData.Action == "newPlayer" {
-            newPlayer(receiveData.Player)
-            websocket.JSON.Send(ws, map[string] interface{} {
-                        "position" : golbalNumber,
-                        "pointInfo" : MapPlayer,
-                    });
+            if receiveData.Action == "newPlayer" {
+                if checkUserNameNotUsed(receiveData.PlayerName) {
+                    WebSocketMaps[ws] = PlayerInfo{PlayerName:receiveData.PlayerName,PlayerPoint:0}
+                    fmt.Print("Player list : ")
+                    fmt.Println(WebSocketMaps)
+                    sendDataLoop()
+                }else{
+                    fmt.Println("User name in used!")
+                    websocket.JSON.Send(ws,map[string] string {
+                            "username_already" : "true",
+                        });
                 }
+            }
 
             if golbalNumber == receiveData.Position {
-                winnerAddPoint(receiveData.Player,1)
+                winnerAddPoint(WebSocketMaps[ws],1)
                 golbalNumber = randomGopher()
-                for _, value := range channel {
-                    websocket.JSON.Send(value, map[string] interface{} {
-                        "position" : golbalNumber,
-                        "pointInfo" : MapPlayer,
-                    });
-                }
+                sendDataLoop()
                 fmt.Println("Position : " + golbalNumber)
-                fmt.Println(channel)
+                fmt.Println(WebSocketMaps)
             }
-        
     }
 }
 
-func deleteWebSocketInSlice(list []*websocket.Conn,ws *websocket.Conn) []*websocket.Conn {
-    var count = len(list)
-    for i := 0; i < count; i++ {
-        if(list[i]==ws){
-            fmt.Println(">_<\"")
-            return append(list[0:i],list[i+1:]...)
+func checkUserNameNotUsed(checkName string) bool {
+    for _,value := range WebSocketMaps {
+        if value.PlayerName == checkName {
+            return false
         }
     }
-    return list
+    return true
 }
 
+func sendDataLoop() {
+    for key,value := range WebSocketMaps {
+        websocket.JSON.Send(key, map[string] interface{} {
+            "position" : golbalNumber,
+            "pointInfo" : value,
+        });
+    }
+}
 func main() {
     golbalNumber = randomGopher()
     fmt.Println(golbalNumber)
-    http.Handle("/start", websocket.Handler(sentToClient))
+    http.Handle("/start", websocket.Handler(processReceive))
     err := http.ListenAndServe(":12345", nil)
     if err != nil {
         panic("ListenAndServe: "+ err.Error())
