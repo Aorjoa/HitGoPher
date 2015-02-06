@@ -1,17 +1,17 @@
     $(document).ready(function(){
-            // Declare global variable
-    var playerName;
-    var dataReceive;
+        // Declare global variable
+        var playerName;
+        var dataReceive;
         function genProcessBar(maxPoint){
-        var sortable = [];
-        for (var name in maxPoint)
-              sortable.push([name, maxPoint[name]])
-        sortable.sort(function(a, b) {return b[1] - a[1]})
-        var topTenPlayers = sortable.slice(0, 10);
-        var sumTopTenPoint = 0;
-        for (var playerRn in topTenPlayers){
-            sumTopTenPoint += (topTenPlayers[playerRn])[1];
-        }
+            var sortable = [];
+            for (var name in maxPoint)
+                  sortable.push([name, maxPoint[name]])
+            sortable.sort(function(a, b) {return b[1] - a[1]})
+            var topTenPlayers = sortable.slice(0, 10);
+            var sumTopTenPoint = 0;
+            for (var playerRn in topTenPlayers){
+                sumTopTenPoint += (topTenPlayers[playerRn])[1];
+            }
 
         // Remove old chart
         $("#showPoint *").remove();
@@ -26,7 +26,7 @@
                 );
         }
     }
-    // Connect WebSocket
+    // Connect WebSocket server
     var ws = new WebSocket("ws://localhost:12345/start");
 
     ws.onopen = function (){
