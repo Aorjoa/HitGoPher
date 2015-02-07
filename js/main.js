@@ -14,7 +14,7 @@
             }
 
         // Remove old chart
-        $("#showPoint *").remove();
+        $("#showPoint :not(h3)").remove();
         // Get top ten player
         for (var playerRn in topTenPlayers){
                 $("#showPoint").append(
