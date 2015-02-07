@@ -1,2 +1,2 @@
 # HitGoPher
-Hit gopher game
+Hit gopher game with golang
