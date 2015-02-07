@@ -98,7 +98,7 @@ func main() {
     golbalNumber = randomGopher()
     fmt.Println(golbalNumber)
     http.Handle("/start", websocket.Handler(processReceive))
-    err := http.ListenAndServe(":12345", nil)
+    err := http.ListenAndServe(":5535", nil)
     if err != nil {
         panic("ListenAndServe: "+ err.Error())
     }
