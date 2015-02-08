@@ -97,9 +97,10 @@ func sendDataLoop() {
 func main() {
     golbalNumber = randomGopher()
     fmt.Println(golbalNumber)
-    http.Handle("/start", websocket.Handler(processReceive))
-    err := http.ListenAndServe(":5535", nil)
+    http.Handle("/sart", websocket.Handler(processReceive))
+    err := http.ListenAndServeTLS(":5535", "/Users/dekcom/Dropbox/repository/HitGoPher/api/keys/www.i-aor.com.pem",
+        "/Users/dekcom/Dropbox/repository/HitGoPher/api/keys/private.pem", nil)
     if err != nil {
-        panic("ListenAndServe: "+ err.Error())
+        panic("ListenAndServeTLS: "+ err.Error())
     }
 }
