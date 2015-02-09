@@ -1,2 +1,3 @@
 # HitGoPher
-HitGoPher is game with HTML5 and Golang
+HitGoPher is multiplayer game with HTML5 and golang comunication via websocket
+We are build in Gopher Gala event
