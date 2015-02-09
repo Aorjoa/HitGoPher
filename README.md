@@ -1,2 +1,2 @@
 # HitGoPher
-Hit gopher game with golang
+HitGoPher is game with HTML5 and Golang
