@@ -27,7 +27,7 @@
         }
     }
     // Connect WebSocket server
-    var ws = new WebSocket("ws://104.236.3.213:5535/start");
+    var ws = new WebSocket("wss://localhost:5535/start");
 
     ws.onopen = function (){
         $("#statusTxt").text("Status : Connected");
