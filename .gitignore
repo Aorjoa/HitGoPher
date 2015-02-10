@@ -1,4 +1,8 @@
 .DS_Store
 DS_Store
 *.pem
+<<<<<<< HEAD
 keys/*
+=======
+keys/*
+>>>>>>> change server region to SIN
